@@ -1,0 +1,52 @@
+services:
+  proxy:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      # These ports are in format <host-port>:<container-port>
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      - '81:81' # Admin Web Port
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+  python:
+    image: python:latest
+    tty: true
+    command: "python /data/server.py"
+    ports:
+      - "7800:80"
+    volumes:
+      - ./data:/data
+  node:
+    image: node:latest
+    command: bash -c "cd /data/ && npm install && node admin.js"
+    tty:  true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/data
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  rabbitmq:
+    image: rabbitmq:4-management
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmquser
+      - RABBITMQ_DEFAULT_PASS=rabbitmqpassword
+    ports:
+      - 15672:15672
+      - 5672:5672
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  
+  

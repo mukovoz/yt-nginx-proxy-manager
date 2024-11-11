@@ -1,0 +1,7 @@
+data/access
+data/custom_ssl
+data/logs
+data/nginx
+data/node_modules
+letsencrypt
+data/letsencrypt-acme-challenge
