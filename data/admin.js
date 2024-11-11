@@ -3,6 +3,11 @@ const app = express()
 const port = 3000
 //app.set('view engine', 'html');
 
+app.get('/admin', (req, res) => {
+  res.sendFile('admin.html', {
+    root: '/data/'
+  });
+})
 
 app.get('/', (req, res) => {
   //res.render('admin.html');
